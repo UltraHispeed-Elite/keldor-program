@@ -124,7 +124,7 @@ function compareKeldor() {
                 let comparing = localStorage.getItem("path"+(j+1));
                 let parse_compare = JSON.parse(comparing);
                 let a = parse_compare["path"].length;
-                let b = (Math.floor((parse_compare["path"][a-1]["score"]/parse_compare["path"][a-1]["steps"])*100000))/1000;
+                let b = (Math.floor((parse_compare["path"][a-1]["score"]/parse_compare["path"][a-1]["steps"])*1000))/100;
 
                 ranking.push(b);
                 ranking.sort((a, b) => b - a);
