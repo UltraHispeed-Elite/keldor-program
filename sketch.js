@@ -7,6 +7,7 @@ var score;
 var followDirection;
 var didScore;
 var compareCount;
+var most_efficient;
 
 var ranking = [];
 var ranking2;
@@ -60,9 +61,13 @@ function draw() {
 function keldor() {
     compareKeldor();
     if(frameCount % 24 === 0) {
-        keldorMove();
-        scoringKeldor();
-        saveKeldor();
+        if(iteration <= 10) {
+            keldorMove();
+            scoringKeldor();
+            saveKeldor();
+        }else {
+            copyKeldor();
+        }
     }
 }
 
@@ -118,28 +123,31 @@ function saveKeldor() {
 }
 
 function compareKeldor() {
-    if(iteration > 1) {
-        if(kb.presses("p")) {
-            for(let j = 0; j<iteration-1; j++) {
-                let comparing = localStorage.getItem("path"+(j+1));
-                let parse_compare = JSON.parse(comparing);
-                let a = parse_compare["path"].length;
-                let b = (Math.floor((parse_compare["path"][a-1]["score"]/parse_compare["path"][a-1]["steps"])*1000))/100;
+    if(iteration > 10) {
+        for(let j = 0; j<iteration-1; j++) {
+            let comparing = localStorage.getItem("path"+(j+1));
+            let parse_compare = JSON.parse(comparing);
+            let a = parse_compare["path"].length;
+            let b = (Math.floor((parse_compare["path"][a-1]["score"]/parse_compare["path"][a-1]["steps"])*1000))/100;
 
-                ranking.push(b);
-                ranking.sort((a, b) => b - a);
+            ranking.push(b);
+            ranking.sort((a, b) => b - a);
                 
-                for(let k=0; k<ranking.length; k++) {
-                    if(b === ranking[k]) {
-                        if(b === ranking[0]) {
-                            ranking2 = parse_compare["iteration"];
-                        }
+            for(let k=0; k<ranking.length; k++) {
+                if(b === ranking[k]) {
+                    if(b === ranking[0]) {
+                        ranking2 = parse_compare["iteration"];
                     }
                 }
             }
-            console.log("iteration "+ranking2+" is the most efficient");
         }
+        console.log("iteration "+ranking2+" is the most efficient");
+        most_efficient = JSON.parse(localStorage.getItem("path"+ranking2));
     }
+}
+
+function copyKeldor() {
+
 }
 
 function isUser(){
