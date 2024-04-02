@@ -6,6 +6,10 @@ var desired_direction;
 var score;
 var followDirection;
 var didScore;
+var compareCount;
+
+var ranking = [];
+var ranking2;
 
 var screen;
 
@@ -54,11 +58,10 @@ function draw() {
 }
 
 function keldor() {
+    compareKeldor();
     if(frameCount % 24 === 0) {
         keldorMove();
-
         scoringKeldor();
-
         saveKeldor();
     }
 }
@@ -112,6 +115,31 @@ function saveKeldor() {
     path_data["path"].push({"direction":followDirection, "steps":steps, "did_score": didScore, "score":score})
 
     localStorage.setItem("path"+path_data['iteration'], JSON.stringify(path_data));
+}
+
+function compareKeldor() {
+    if(iteration > 1) {
+        if(kb.presses("p")) {
+            for(let j = 0; j<iteration-1; j++) {
+                let comparing = localStorage.getItem("path"+(j+1));
+                let parse_compare = JSON.parse(comparing);
+                let a = parse_compare["path"].length;
+                let b = (Math.floor((parse_compare["path"][a-1]["score"]/parse_compare["path"][a-1]["steps"])*100000))/1000;
+
+                ranking.push(b);
+                ranking.sort((a, b) => b - a);
+                
+                for(let k=0; k<ranking.length; k++) {
+                    if(b === ranking[k]) {
+                        if(b === ranking[0]) {
+                            ranking2 = parse_compare["iteration"];
+                        }
+                    }
+                }
+            }
+            console.log("iteration "+ranking2+" is the most efficient");
+        }
+    }
 }
 
 function isUser(){
