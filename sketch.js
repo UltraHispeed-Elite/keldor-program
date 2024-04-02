@@ -5,10 +5,32 @@ var steps;
 var desired_direction;
 var score;
 var followDirection;
+var didScore;
 
 var screen;
 
 var player;
+
+var iteration = findIteration();
+
+function findIteration() {
+    let find = localStorage.getItem("iteration");
+
+    if(find !== null) {
+        return parseInt(find)+1;
+    }else {
+        return 1
+    }
+}
+
+var path_data = {
+    "iteration": iteration,
+    "path": [
+
+    ]
+}
+
+console.log(iteration, path_data['iteration']);
 
 function setup() {
     screen = createCanvas(400,400);
@@ -36,6 +58,8 @@ function keldor() {
         keldorMove();
 
         scoringKeldor();
+
+        saveKeldor();
     }
 }
 
@@ -76,7 +100,18 @@ function scoringKeldor() {
     if(desired_direction === followDirection) {
         score += 1;
         console.log(steps, score);
+        didScore = true;
+    }else {
+        didScore = false;
     }
+}
+
+function saveKeldor() {
+    localStorage.setItem("iteration", iteration);
+
+    path_data["path"].push({"direction":followDirection, "steps":steps, "did_score": didScore, "score":score})
+
+    localStorage.setItem("path"+path_data['iteration'], JSON.stringify(path_data));
 }
 
 function isUser(){
