@@ -1,0 +1,116 @@
+var keldor_program = true;
+
+var position_number;
+var steps;
+var desired_direction;
+var score;
+var followDirection;
+
+var screen;
+
+var player;
+
+function setup() {
+    screen = createCanvas(400,400);
+    screen.position(0,0);
+
+    player = new Sprite(200,200,50,50);
+
+    position_number = 0;
+    steps = 0;
+    score = 0;
+}
+
+function draw() {
+    background('black');
+
+    if(keldor_program === true) {
+        keldor()
+    }else {
+        isUser();
+    }
+}
+
+function keldor() {
+    if(frameCount % 24 === 0) {
+        keldorMove();
+
+        scoringKeldor();
+    }
+}
+
+function keldorMove() {
+    let findDirection = Math.floor(random(0,4)+1);
+    followDirection
+
+    switch(findDirection) {
+        case 1:
+            followDirection = "up";
+            break;
+        case 2:
+            followDirection = "left";
+            break;
+        case 3:
+            followDirection = "down";
+            break;
+        case 4:
+            followDirection = "right";
+            break;
+    }
+
+    move(followDirection);
+}
+
+function scoringKeldor() {
+    position_number = steps;
+    if(position_number % 4 === 0) {
+        desired_direction = "up";
+    }else if(position_number % 3 === 0) {
+        desired_direction = "left";
+    }else if(position_number % 2 === 0) {
+        desired_direction = "down";
+    }else if(position_number % 1 === 0) {
+        desired_direction = "right";
+    }
+
+    if(desired_direction === followDirection) {
+        score += 1;
+        console.log(steps, score);
+    }
+}
+
+function isUser(){
+    playerMovement();
+}
+
+function playerMovement() {
+    if(kb.pressing('w')) {
+        move("up");
+    }
+
+    if(kb.pressing('a')) {
+        move("left");
+    }
+
+    if(kb.pressing('s')) {
+        move("down");
+    }
+
+    if(kb.pressing('d')) {
+        move("right");
+    }
+}
+
+function move(direction) {
+    if(direction === "up") {
+        player.y -= 5;
+    }else if(direction === "left") {
+        player.x -= 5;
+    }else if(direction === "down") {
+        player.y += 5;
+    }else if(direction === "right") {
+        player.x += 5;
+    }
+
+    steps += 1;
+}
