@@ -147,7 +147,7 @@ function compareKeldor() {
 }
 
 function copyKeldor() {
-    
+
 }
 
 function isUser(){
