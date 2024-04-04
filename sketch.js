@@ -1,51 +1,76 @@
-var player;
+function findDirection() {
+    let a = Math.floor(random(0,2)); // x
+    let b = Math.floor(random(0,2)); // y
 
-var scores = [
-    0,
-    0,
-     0, 
-    0,
-]
+    let c = (a*4)+(b*4)-4; // possible: -4,0,4;
 
-var arr, max;
+    let d
 
-var total_score = findTotal();
+    if(c < 0) {
+        d = "x";
+    }else if(c > 0) {
+        d = "y";
+    }else {
+        d = "n";
+    }
+
+    let e = Math.floor(random(0,2)); // 1
+    let f = Math.floor(random(0,2)); // 2
+
+    let g = (e*4)+(f*4)-4; // possible: -4,0,4;
+
+    let h;
+
+    if(d !== "n"){
+        if(g !== 0) {
+            if(g > 0) {
+                h = 1;
+            }else if(g < 0) {
+                h = 2;
+            }
+        }else {
+            d = "n";
+            h = ""
+        }
+    }else {
+        d = "n";
+        h = "";
+    }
+
+    let i = d+h;
+
+    console.log(i);
+    
+    return i;
+}
+
+var keldor;
 
 function setup() {
-    let screen = createCanvas(400,400);
-    screen.position(0,0);
+    createCanvas(400,400);
 
-    player = new Sprite(200,200,50,50);
+    keldor = new Sprite(200,200,50,50);
 }
 
 function draw() {
     background("black");
+
+    if(frameCount % 1 === 0) {
+        keldorMove(findDirection());
+    }
 }
 
-function findTotal() {
-    let total  = (scores["u"]+scores["l"]+scores["d"]+scores["r"]);
-    return total;
-}
-
-function findDirection() {
-    let directional_wants = [
-        Math.floor(random(0,1)),
-        Math.floor(random(0,1)),
-        Math.floor(random(0,1)),
-        Math.floor(random(0,1))
-    ]
-
-    let directional_weight = [
-        total_score - (scores[0]/total_score),
-        total_score - (scores[1]/total_score),
-        total_score - (scores[2]/total_score),
-        total_score - (scores[3]/total_score),
-    ]
-
-    let directional_needs = [
-        directional_wants[0] * directional_weight[0],
-        directional_wants[1] * directional_weight[1],
-        directional_wants[2] * directional_weight[2],
-        directional_wants[3] * directional_weight[3],
-    ]
+function keldorMove(direction){
+    if(direction === "y1") {
+        keldor.y -= 5;
+    }else if(direction === "x1") {
+        keldor.x -= 5;
+    }else if(direction === "y2") {
+        keldor.y += 5;
+    }else if(direction === "x2") {
+        keldor.x += 5;
+    }else {
+        keldor.vel.x = 0;
+        keldor.vel.y = 0;
+    }
 }
