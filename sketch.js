@@ -1,3 +1,77 @@
+var keldor;
+var the_direction;
+
+var steps;
+
+var score;
+var scores = {
+    "y1": 0,
+    "x1": 0,
+    "y2": 0,
+    "x2": 0,
+    "total": 0
+};
+
+function setup() {
+    createCanvas(400,400);
+
+    keldor = new Sprite(200,200,50,50);
+
+    steps = 0;
+    score = 0;
+}
+
+function draw() {
+    background("black");
+
+    if(frameCount % 5 === 0) {
+        keldorMove(findDirection());
+        console.log(steps);
+        keldorScore();
+    }
+}
+
+function keldorMove(direction){
+    the_direction = direction;
+    if(direction === "y1") {
+        keldor.y -= 5;
+        steps +=1;
+    }else if(direction === "x1") {
+        keldor.x -= 5;
+        steps +=1;
+    }else if(direction === "y2") {
+        keldor.y += 5;
+        steps +=1;
+    }else if(direction === "x2") {
+        keldor.x += 5;
+        steps +=1;
+    }else {
+        keldor.vel.x = 0;
+        keldor.vel.y = 0;
+    };
+}
+
+function keldorScore() {
+    let desired;
+
+    if(steps % 4 === 0) {
+        desired = "y1";
+    }else if(steps % 3 === 0) {
+        desired = "x1";
+    }else if(steps % 2 === 0) {
+        desired = "y2";
+    }else if(steps % 1 === 0) {
+        desired = "x2";
+    }
+
+    if(the_direction === desired) {
+        score += 1;
+        scores[the_direction] += 1;
+        scores["total"] = score;
+        console.log(scores);
+    }
+}
+
 function findDirection() {
     let a = Math.floor(random(0,2)); // x
     let b = Math.floor(random(0,2)); // y
@@ -29,48 +103,17 @@ function findDirection() {
                 h = 2;
             }
         }else {
-            d = "n";
-            h = ""
+            d = findDirection();
+            h = "";
         }
     }else {
-        d = "n";
+        d = findDirection;
         h = "";
     }
 
     let i = d+h;
 
-    console.log(i);
+    //console.log(i);
     
     return i;
-}
-
-var keldor;
-
-function setup() {
-    createCanvas(400,400);
-
-    keldor = new Sprite(200,200,50,50);
-}
-
-function draw() {
-    background("black");
-
-    if(frameCount % 1 === 0) {
-        keldorMove(findDirection());
-    }
-}
-
-function keldorMove(direction){
-    if(direction === "y1") {
-        keldor.y -= 5;
-    }else if(direction === "x1") {
-        keldor.x -= 5;
-    }else if(direction === "y2") {
-        keldor.y += 5;
-    }else if(direction === "x2") {
-        keldor.x += 5;
-    }else {
-        keldor.vel.x = 0;
-        keldor.vel.y = 0;
-    }
 }
