@@ -4,7 +4,10 @@ var the_direction;
 var steps;
 
 var jerry;
-var jerry_map
+var jerry_map;
+var jerry_score_map;
+
+var score_counter;
 
 var scores = {
     "y1": 0,
@@ -28,12 +31,19 @@ function setup() {
     jerry_map = []
     jerry_map.length = screen.width;
 
+    jerry_score_map = []
+    jerry_score_map.length = screen.width;
+
     for(let i = 0; i < jerry_map.length; i++) {
         jerry_map[i] = [];
         jerry_map[i].length = screen.height;
 
+        jerry_score_map[i] = [];
+        jerry_score_map[i].length = screen.height;
+
         for(let j = 0; j<jerry_map[i].length; j++) {
             jerry_map[i][j] = 0;
+            jerry_score_map[i][j] = 0;
         }
     }
 
@@ -46,9 +56,6 @@ function draw() {
     if(frameCount % 5 === 0) {
         keldorMove(findDirection());
         keldorScore();
-    }
-
-    if(frameCount % 5 === 0) {
         mapJerry();
     }
 
@@ -83,6 +90,9 @@ function mapJerry() {
     if(jerry_map[keldor.x][keldor.y] === NaN || undefined){
         console.log(jerry_map[keldor.x][keldor.y]);
     }
+    if(score_counter === true) {
+        jerry_score_map[keldor.x][keldor.y] += 1;
+    }
     new jerry.Sprite(keldor.x, keldor.y);
 }
 
@@ -104,7 +114,10 @@ function keldorScore() {
         scores["x_total"] = scores["x1"]+scores["x2"];
         scores["y_total"] = scores["y1"]+scores["y2"];
         scores["total"] = scores["x_total"]+scores["y_total"];
+        score_counter = true;
        // console.log(scores);
+    }else {
+        score_counter = false;
     }
 }
 
