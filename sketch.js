@@ -29,17 +29,17 @@ function setup() {
     jerry.collider = 'n';
 
     jerry_map = []
-    jerry_map.length = screen.width;
+    jerry_map.length = screen.height+1;
 
     jerry_score_map = []
-    jerry_score_map.length = screen.width;
+    jerry_score_map.length = screen.height+1;
 
     for(let i = 0; i < jerry_map.length; i++) {
         jerry_map[i] = [];
-        jerry_map[i].length = screen.height;
+        jerry_map[i].length = screen.width+1;
 
         jerry_score_map[i] = [];
-        jerry_score_map[i].length = screen.height;
+        jerry_score_map[i].length = screen.width+1;
 
         for(let j = 0; j<jerry_map[i].length; j++) {
             jerry_map[i][j] = 0;
@@ -59,7 +59,12 @@ function draw() {
         mapJerry();
     }
 
-    if(keldor.x < 0 || keldor.x > 400 || keldor.y < 0 || keldor.y > 400) {
+    if(keldor.x <= 0 || keldor.x >= 400 || keldor.y <= 0 || keldor.y >= 400) {
+        let map_data = {
+            "moveming_map": jerry_map,
+            "scoring_map": jerry_score_map
+        }
+        sessionStorage.setItem("map", JSON.stringify(map_data));
         location.reload();
     }
 }
@@ -86,12 +91,11 @@ function keldorMove(direction){
 }
 
 function mapJerry() {
-    jerry_map[keldor.x][keldor.y] += 1;
-    if(jerry_map[keldor.x][keldor.y] === NaN || undefined){
-        console.log(jerry_map[keldor.x][keldor.y]);
-    }
+    console.log(keldor.x, keldor.y);
+    jerry_map[parseInt(Math.floor(keldor.y))][parseInt(Math.floor(keldor.x))]++;
+    console.log(jerry_map[Math.floor(keldor.y)][Math.floor(keldor.x)]);
     if(score_counter === true) {
-        jerry_score_map[keldor.x][keldor.y] += 1;
+        jerry_score_map[parseInt(Math.floor(keldor.y))][parseInt(Math.floor(keldor.x))]++;
     }
     new jerry.Sprite(keldor.x, keldor.y);
 }
