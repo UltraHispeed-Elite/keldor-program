@@ -3,12 +3,13 @@ var the_direction;
 
 var steps;
 
-var score;
 var scores = {
     "y1": 0,
     "x1": 0,
     "y2": 0,
     "x2": 0,
+    "x_total": 0,
+    "y_total": 0,
     "total": 0
 };
 
@@ -18,7 +19,6 @@ function setup() {
     keldor = new Sprite(200,200,50,50);
 
     steps = 0;
-    score = 0;
 }
 
 function draw() {
@@ -55,19 +55,20 @@ function keldorScore() {
     let desired;
 
     if(steps % 4 === 0) {
-        desired = "y1";
-    }else if(steps % 3 === 0) {
-        desired = "x1";
-    }else if(steps % 2 === 0) {
         desired = "y2";
-    }else if(steps % 1 === 0) {
+    }else if(steps % 3 === 0) {
         desired = "x2";
+    }else if(steps % 2 === 0) {
+        desired = "y1";
+    }else if(steps % 1 === 0) {
+        desired = "x1";
     }
 
     if(the_direction === desired) {
-        score += 1;
         scores[the_direction] += 1;
-        scores["total"] = score;
+        scores["x_total"] = scores["x1"]+scores["x2"];
+        scores["y_total"] = scores["y1"]+scores["y2"];
+        scores["total"] = scores["x_total"]+scores["y_total"];
         console.log(scores);
     }
 }
@@ -76,7 +77,9 @@ function findDirection() {
     let a = Math.floor(random(0,2)); // x
     let b = Math.floor(random(0,2)); // y
 
-    let c = (a*4)+(b*4)-4; // possible: -4,0,4;
+    let c = (a*find_axis_weight("x"))-(b*find_axis_weight("y")); // possible: -4,0,4;
+
+    console.log(c);
 
     let d
 
@@ -91,7 +94,8 @@ function findDirection() {
     let e = Math.floor(random(0,2)); // 1
     let f = Math.floor(random(0,2)); // 2
 
-    let g = (e*4)+(f*4)-4; // possible: -4,0,4;
+    let g = (e*direction_axis_weight(d,1))-(f*direction_axis_weight(d,1)); // possible: -4,0,4;
+    console.log(g);
 
     let h;
 
@@ -116,4 +120,56 @@ function findDirection() {
     //console.log(i);
     
     return i;
+}
+
+function find_axis_weight(axis) {
+    let weight;
+
+    if(scores["total"] !== 0) {
+        weight = scores["total"]+(scores[axis+"_total"]/scores["total"]);
+        if(weight === Infinity || weight === NaN) {
+            weight = 0
+        }
+    }else {
+        weight = 0;
+    }
+
+    if(weight === Infinity || weight === NaN) {
+        weight = 0
+    }
+
+    if(weight === 0) {
+        weight = (Math.floor(random(1,4)));
+    }
+    
+
+    return weight;
+}
+
+function direction_axis_weight(axis,direction) {
+    let weight;
+
+    if(scores["total"] !== 0) {
+        if(axis !== "n"){
+            weight = scores["total"]+(scores[axis+direction]/scores["x_total"]);
+            console.log(scores[axis+direction]);
+            if(weight === Infinity || weight === NaN) {
+                weight = 0
+            }
+        }else {
+            weight = 0;
+        }
+    }else {
+        weight = 0;
+    }
+
+    if(weight === Infinity || weight === NaN) {
+        weight = 0
+    }
+
+    if(weight === 0) {
+        weight = (Math.floor(random(2,4)));
+    }
+
+    return weight;
 }
