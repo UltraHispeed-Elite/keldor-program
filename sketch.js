@@ -6,6 +6,7 @@ var steps;
 var jerry;
 var jerry_map;
 var jerry_score_map;
+var jerry_path_map;
 
 var score_counter;
 
@@ -34,6 +35,10 @@ function setup() {
     jerry_score_map = []
     jerry_score_map.length = screen.height+1;
 
+    jerry_path_map = []
+    jerry_path_map.length = screen.height+1;
+
+
     for(let i = 0; i < jerry_map.length; i++) {
         jerry_map[i] = [];
         jerry_map[i].length = screen.width+1;
@@ -41,9 +46,18 @@ function setup() {
         jerry_score_map[i] = [];
         jerry_score_map[i].length = screen.width+1;
 
+        jerry_path_map[i] = [];
+        jerry_path_map[i].length = screen.width+1;
+
         for(let j = 0; j<jerry_map[i].length; j++) {
             jerry_map[i][j] = 0;
             jerry_score_map[i][j] = 0;
+            jerry_path_map[i][j] = {
+                "x1":0,
+                "y1":0,
+                "x2":0,
+                "y2":0
+            };
         }
     }
 
@@ -62,9 +76,10 @@ function draw() {
     if(keldor.x <= 0 || keldor.x >= 400 || keldor.y <= 0 || keldor.y >= 400) {
         let map_data = {
             "moveming_map": jerry_map,
+            "direction_map": jerry_path_map,
             "scoring_map": jerry_score_map
         }
-        sessionStorage.setItem("map", JSON.stringify(map_data));
+        //sessionStorage.setItem("map", JSON.stringify(map_data));
         location.reload();
     }
 }
@@ -91,11 +106,13 @@ function keldorMove(direction){
 }
 
 function mapJerry() {
-    console.log(keldor.x, keldor.y);
     jerry_map[parseInt(Math.floor(keldor.y))][parseInt(Math.floor(keldor.x))]++;
-    console.log(jerry_map[Math.floor(keldor.y)][Math.floor(keldor.x)]);
+    jerry_path_map[parseInt(Math.floor(keldor.y))][parseInt(Math.floor(keldor.x))][the_direction]++;
+
+    //console.log(jerry_map[Math.floor(keldor.y)][Math.floor(keldor.x)]);
     if(score_counter === true) {
         jerry_score_map[parseInt(Math.floor(keldor.y))][parseInt(Math.floor(keldor.x))]++;
+        console.log(jerry_score_map[parseInt(Math.floor(keldor.y))][parseInt(Math.floor(keldor.x))])
     }
     new jerry.Sprite(keldor.x, keldor.y);
 }
