@@ -3,6 +3,9 @@ var the_direction;
 
 var steps;
 
+var jerry;
+var jerry_map
+
 var scores = {
     "y1": 0,
     "x1": 0,
@@ -14,9 +17,25 @@ var scores = {
 };
 
 function setup() {
-    createCanvas(400,400);
+    let screen = createCanvas(400,400);
 
     keldor = new Sprite(200,200,50,50);
+
+    jerry = new Group();
+    jerry.r = 1;
+    jerry.collider = 'n';
+
+    jerry_map = []
+    jerry_map.length = screen.width;
+
+    for(let i = 0; i < jerry_map.length; i++) {
+        jerry_map[i] = [];
+        jerry_map[i].length = screen.height;
+
+        for(let j = 0; j<jerry_map[i].length; j++) {
+            jerry_map[i][j] = 0;
+        }
+    }
 
     steps = 0;
 }
@@ -28,10 +47,18 @@ function draw() {
         keldorMove(findDirection());
         keldorScore();
     }
+
+    if(frameCount % 5 === 0) {
+        mapJerry();
+    }
+
+    if(keldor.x < 0 || keldor.x > 400 || keldor.y < 0 || keldor.y > 400) {
+        location.reload();
+    }
 }
 
 function keldorMove(direction){
-    console.log(direction);
+    //console.log(direction)
     the_direction = direction;
     if(direction === "y1") {
         keldor.y -= 5;
@@ -51,17 +78,25 @@ function keldorMove(direction){
     };
 }
 
+function mapJerry() {
+    jerry_map[keldor.x][keldor.y] += 1;
+    if(jerry_map[keldor.x][keldor.y] === NaN || undefined){
+        console.log(jerry_map[keldor.x][keldor.y]);
+    }
+    new jerry.Sprite(keldor.x, keldor.y);
+}
+
 function keldorScore() {
     let desired;
 
     if(steps % 4 === 0) {
-        desired = "y2";
-    }else if(steps % 3 === 0) {
         desired = "x2";
+    }else if(steps % 3 === 0) {
+        desired = "y2";
     }else if(steps % 2 === 0) {
-        desired = "y1";
-    }else if(steps % 1 === 0) {
         desired = "x1";
+    }else if(steps % 1 === 0) {
+        desired = "y1";
     }
 
     if(the_direction === desired) {
@@ -90,23 +125,28 @@ function findDirection() {
 
                 if(determine_x > 0) {
                     return "x1"
-                }else {
+                }else if(determine_x < 0){
                     return "x2";
+                }else {
+                    let i = Math.floor(random(0,2)+1);
+
+                    switch(i) {
+                        case 1:
+                            return "x1";
+                            break;
+                        case 2:
+                            return "x2";
+                            break;
+                    }
                 }
             }else {
-                let i = Math.floor(random(0,4)+1);
+                let i = Math.floor(random(0,2)+1);
 
                 switch(i) {
                     case 1:
-                        return "y1";
-                        break;
-                    case 2:
                         return "x1";
                         break;
-                    case 3:
-                        return "y2";
-                        break;
-                    case 4:
+                    case 2:
                         return "x2";
                         break;
                 }
@@ -120,24 +160,29 @@ function findDirection() {
 
                 if(determine_y > 0) {
                     return "y1"
-                }else {
+                }else if (determine_y < 0){
                     return "y2";
+                }else {
+                    let i = Math.floor(random(0,2)+1);
+
+                    switch(i) {
+                        case 1:
+                            return "y1";
+                            break;
+                        case 2:
+                            return "y2";
+                            break;
+                    }
                 }
             }else {
-                let i = Math.floor(random(0,4)+1);
+                let i = Math.floor(random(0,2)+1);
 
                 switch(i) {
                     case 1:
                         return "y1";
                         break;
                     case 2:
-                        return "x1";
-                        break;
-                    case 3:
                         return "y2";
-                        break;
-                    case 4:
-                        return "x2";
                         break;
                 }
             }
