@@ -1,179 +1,180 @@
-var keldor_program = true;
+var keldor;
+var the_direction;
 
-var position_number;
 var steps;
-var desired_direction;
-var score;
-var followDirection;
-var didScore;
-var compareCount;
 
-var ranking = [];
-var ranking2;
-
-var screen;
-
-var player;
-
-var iteration = findIteration();
-
-function findIteration() {
-    let find = localStorage.getItem("iteration");
-
-    if(find !== null) {
-        return parseInt(find)+1;
-    }else {
-        return 1
-    }
-}
-
-var path_data = {
-    "iteration": iteration,
-    "path": [
-
-    ]
-}
-
-console.log(iteration, path_data['iteration']);
+var scores = {
+    "y1": 0,
+    "x1": 0,
+    "y2": 0,
+    "x2": 0,
+    "x_total": 0,
+    "y_total": 0,
+    "total": 0
+};
 
 function setup() {
-    screen = createCanvas(400,400);
-    screen.position(0,0);
+    createCanvas(400,400);
 
-    player = new Sprite(200,200,50,50);
+    keldor = new Sprite(200,200,50,50);
 
-    position_number = 0;
     steps = 0;
-    score = 0;
 }
 
 function draw() {
-    background('black');
+    background("black");
 
-    if(keldor_program === true) {
-        keldor()
+    if(frameCount % 5 === 0) {
+        keldorMove(findDirection());
+        keldorScore();
+    }
+}
+
+function keldorMove(direction){
+    console.log(direction);
+    the_direction = direction;
+    if(direction === "y1") {
+        keldor.y -= 5;
+        steps +=1;
+    }else if(direction === "x1") {
+        keldor.x -= 5;
+        steps +=1;
+    }else if(direction === "y2") {
+        keldor.y += 5;
+        steps +=1;
+    }else if(direction === "x2") {
+        keldor.x += 5;
+        steps +=1;
     }else {
-        isUser();
+        keldor.vel.x = 0;
+        keldor.vel.y = 0;
+    };
+}
+
+function keldorScore() {
+    let desired;
+
+    if(steps % 4 === 0) {
+        desired = "y2";
+    }else if(steps % 3 === 0) {
+        desired = "x2";
+    }else if(steps % 2 === 0) {
+        desired = "y1";
+    }else if(steps % 1 === 0) {
+        desired = "x1";
+    }
+
+    if(the_direction === desired) {
+        scores[the_direction] += 1;
+        scores["x_total"] = scores["x1"]+scores["x2"];
+        scores["y_total"] = scores["y1"]+scores["y2"];
+        scores["total"] = scores["x_total"]+scores["y_total"];
+       // console.log(scores);
     }
 }
 
-function keldor() {
-    compareKeldor();
-    if(frameCount % 24 === 0) {
-        keldorMove();
-        scoringKeldor();
-        saveKeldor();
-    }
-}
+function findDirection() {
+    let x_w, y_w, x1_w, x2_w, y1_w, y2_w;
+    if(scores["total"] !== 0){ 
+        x_w = scores["total"] - scores["x_total"];
+        y_w = scores["total"] - scores["y_total"];
 
-function keldorMove() {
-    let findDirection = Math.floor(random(0,4)+1);
-    followDirection
+        let determine_axis = x_w-y_w;
 
-    switch(findDirection) {
-        case 1:
-            followDirection = "up";
-            break;
-        case 2:
-            followDirection = "left";
-            break;
-        case 3:
-            followDirection = "down";
-            break;
-        case 4:
-            followDirection = "right";
-            break;
-    }
+        if(determine_axis > 0) {
+            if(scores["x_total" !== 0]){
+                x1_w = scores["x_total"] - scores["x1"];
+                x2_w = scores["x_total"] - scores["x2"];
 
-    move(followDirection);
-}
+                let determine_x = x1_w-x2_w;
 
-function scoringKeldor() {
-    position_number = steps;
-    if(position_number % 4 === 0) {
-        desired_direction = "up";
-    }else if(position_number % 3 === 0) {
-        desired_direction = "left";
-    }else if(position_number % 2 === 0) {
-        desired_direction = "down";
-    }else if(position_number % 1 === 0) {
-        desired_direction = "right";
-    }
+                if(determine_x > 0) {
+                    return "x1"
+                }else {
+                    return "x2";
+                }
+            }else {
+                let i = Math.floor(random(0,4)+1);
 
-    if(desired_direction === followDirection) {
-        score += 1;
-        console.log(steps, score);
-        didScore = true;
-    }else {
-        didScore = false;
-    }
-}
-
-function saveKeldor() {
-    localStorage.setItem("iteration", iteration);
-
-    path_data["path"].push({"direction":followDirection, "steps":steps, "did_score": didScore, "score":score})
-
-    localStorage.setItem("path"+path_data['iteration'], JSON.stringify(path_data));
-}
-
-function compareKeldor() {
-    if(iteration > 1) {
-        if(kb.presses("p")) {
-            for(let j = 0; j<iteration-1; j++) {
-                let comparing = localStorage.getItem("path"+(j+1));
-                let parse_compare = JSON.parse(comparing);
-                let a = parse_compare["path"].length;
-                let b = (Math.floor((parse_compare["path"][a-1]["score"]/parse_compare["path"][a-1]["steps"])*1000))/100;
-
-                ranking.push(b);
-                ranking.sort((a, b) => b - a);
-                
-                for(let k=0; k<ranking.length; k++) {
-                    if(b === ranking[k]) {
-                        if(b === ranking[0]) {
-                            ranking2 = parse_compare["iteration"];
-                        }
-                    }
+                switch(i) {
+                    case 1:
+                        return "y1";
+                        break;
+                    case 2:
+                        return "x1";
+                        break;
+                    case 3:
+                        return "y2";
+                        break;
+                    case 4:
+                        return "x2";
+                        break;
                 }
             }
-            console.log("iteration "+ranking2+" is the most efficient");
+        }else if(determine_axis < 0) {
+            if(scores["y_total"] !== 0) {
+                y1_w = scores["y_total"] - scores["y1"];
+                y2_w = scores["y_total"] - scores["y2"];
+
+                let determine_y = y1_w-y2_w;
+
+                if(determine_y > 0) {
+                    return "y1"
+                }else {
+                    return "y2";
+                }
+            }else {
+                let i = Math.floor(random(0,4)+1);
+
+                switch(i) {
+                    case 1:
+                        return "y1";
+                        break;
+                    case 2:
+                        return "x1";
+                        break;
+                    case 3:
+                        return "y2";
+                        break;
+                    case 4:
+                        return "x2";
+                        break;
+                }
+            }
+        }else {
+            let i = Math.floor(random(0,4)+1);
+
+            switch(i) {
+                case 1:
+                    return "y1";
+                    break;
+                case 2:
+                    return "x1";
+                    break;
+                case 3:
+                    return "y2";
+                    break;
+                case 4:
+                    return "x2";
+                    break;
+            }
+        }
+    }else {
+        let i = Math.floor(random(0,4)+1);
+
+        switch(i) {
+            case 1:
+                return "y1";
+                break;
+            case 2:
+                return "x1";
+                break;
+            case 3:
+                return "y2";
+                break;
+            case 4:
+                return "x2";
+                break;
         }
     }
-}
-
-function isUser(){
-    playerMovement();
-}
-
-function playerMovement() {
-    if(kb.pressing('w')) {
-        move("up");
-    }
-
-    if(kb.pressing('a')) {
-        move("left");
-    }
-
-    if(kb.pressing('s')) {
-        move("down");
-    }
-
-    if(kb.pressing('d')) {
-        move("right");
-    }
-}
-
-function move(direction) {
-    if(direction === "up") {
-        player.y -= 5;
-    }else if(direction === "left") {
-        player.x -= 5;
-    }else if(direction === "down") {
-        player.y += 5;
-    }else if(direction === "right") {
-        player.x += 5;
-    }
-
-    steps += 1;
 }
