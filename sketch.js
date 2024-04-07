@@ -161,7 +161,7 @@ function keldorScore() {
 
 function findDirection() {
     let x_w, y_w, x1_w, x2_w, y1_w, y2_w;
-    let determine_mode = Math.floor(random(0,2)+1);
+    let determine_mode = Math.floor(random(0,5)+1);
     if(determine_mode === 1) {
         if(scores["total"] !== 0){ 
             x_w = steps_counter["total"] - steps_counter["x_steps"];
@@ -275,7 +275,7 @@ function findDirection() {
                     break;
             }
         }
-    }else {
+    }else if(determine_mode === 2){
         if(scores["total"] !== 0){ 
             x_w = scores["total"] - scores["x_total"];
             y_w = scores["total"] - scores["y_total"];
@@ -321,6 +321,408 @@ function findDirection() {
                 if(scores["y_total"] !== 0) {
                     y1_w = scores["y_total"] - scores["y1"];
                     y2_w = scores["y_total"] - scores["y2"];
+    
+                    let determine_y = y1_w-y2_w;
+    
+                    if(determine_y > 0) {
+                        return "y1"
+                    }else if (determine_y < 0){
+                        return "y2";
+                    }else {
+                        let i = Math.floor(random(0,2)+1);
+    
+                        switch(i) {
+                            case 1:
+                                return "y1";
+                                break;
+                            case 2:
+                                return "y2";
+                                break;
+                        }
+                    }
+                }else {
+                    let i = Math.floor(random(0,2)+1);
+    
+                    switch(i) {
+                        case 1:
+                            return "y1";
+                            break;
+                        case 2:
+                            return "y2";
+                            break;
+                    }
+                }
+            }else {
+                let i = Math.floor(random(0,4)+1);
+    
+                switch(i) {
+                    case 1:
+                        return "y1";
+                        break;
+                    case 2:
+                        return "x1";
+                        break;
+                    case 3:
+                        return "y2";
+                        break;
+                    case 4:
+                        return "x2";
+                        break;
+                }
+            }
+        }else{
+            let i = Math.floor(random(0,4)+1);
+    
+            switch(i) {
+                case 1:
+                    return "y1";
+                    break;
+                case 2:
+                    return "x1";
+                    break;
+                case 3:
+                    return "y2";
+                    break;
+                case 4:
+                    return "x2";
+                    break;
+            }
+        }
+    }else if(determine_mode === 3) {
+        if(scores["total"] !== 0){ 
+            x_w1 = steps_counter["total"] - steps_counter["x_steps"];
+            y_w1 = steps_counter["total"] - steps_counter["y_steps"];
+            x_w2 = scores["total"] - scores["x_total"];
+            y_w2 = scores["total"] - scores["y_total"];
+    
+            x_w = (x_w1+x_w2)/2;
+            y_w = (y_w1+y_w2)/2;
+    
+            let determine_axis = x_w-y_w;
+    
+            if(determine_axis > 0) {
+                if(scores["x_total"] !== 0){
+                    x1_w1 = steps_counter["x_steps"] - steps_counter["x1"];
+                    x2_w1 = steps_counter["x_steps"] - steps_counter["x1"];
+                    x1_w2 = scores["x_total"] - scores["x1"];
+                    x2_w2 = scores["x_total"] - scores["x2"];
+    
+                    x1_w = (x1_w1+x1_w2)/2;
+                    x2_w = (x2_w1+x2_w2)/2;
+    
+                    let determine_x = x1_w-x2_w;
+    
+                    if(determine_x > 0) {
+                        return "x1"
+                    }else if(determine_x < 0){
+                        return "x2";
+                    }else {
+                        let i = Math.floor(random(0,2)+1);
+    
+                        switch(i) {
+                            case 1:
+                                return "x1";
+                                break;
+                            case 2:
+                                return "x2";
+                                break;
+                        }
+                    }
+                }else {
+                    let i = Math.floor(random(0,2)+1);
+    
+                    switch(i) {
+                        case 1:
+                            return "x1";
+                            break;
+                        case 2:
+                            return "x2";
+                            break;
+                    }
+                }
+            }else if(determine_axis < 0) {
+                if(scores["y_total"] !== 0) {
+                    y1_w1 = steps_counter["y_steps"] - steps_counter["y1"];
+                    y2_w1 = steps_counter["y_steps"] - steps_counter["y1"];
+                    y1_w2 = scores["y_total"] - scores["y1"];
+                    y2_w2 = scores["y_total"] - scores["y2"];
+    
+                    y1_w = (y1_w1+y1_w2)/2;
+                    y2_w = (y2_w1+y2_w2)/2;
+    
+                    let determine_y = y1_w-y2_w;
+    
+                    if(determine_y > 0) {
+                        return "y1"
+                    }else if (determine_y < 0){
+                        return "y2";
+                    }else {
+                        let i = Math.floor(random(0,2)+1);
+    
+                        switch(i) {
+                            case 1:
+                                return "y1";
+                                break;
+                            case 2:
+                                return "y2";
+                                break;
+                        }
+                    }
+                }else {
+                    let i = Math.floor(random(0,2)+1);
+    
+                    switch(i) {
+                        case 1:
+                            return "y1";
+                            break;
+                        case 2:
+                            return "y2";
+                            break;
+                    }
+                }
+            }else {
+                let i = Math.floor(random(0,4)+1);
+    
+                switch(i) {
+                    case 1:
+                        return "y1";
+                        break;
+                    case 2:
+                        return "x1";
+                        break;
+                    case 3:
+                        return "y2";
+                        break;
+                    case 4:
+                        return "x2";
+                        break;
+                }
+            }
+        }else {
+            let i = Math.floor(random(0,4)+1);
+    
+            switch(i) {
+                case 1:
+                    return "y1";
+                    break;
+                case 2:
+                    return "x1";
+                    break;
+                case 3:
+                    return "y2";
+                    break;
+                case 4:
+                    return "x2";
+                    break;
+            }
+        }
+    }else if(determine_mode === 4) {
+        if(scores["total"] !== 0){ 
+            x_w1 = steps_counter["total"] - steps_counter["x_steps"];
+            y_w1 = steps_counter["total"] - steps_counter["y_steps"];
+            x_w2 = scores["total"] - scores["x_total"];
+            y_w2 = scores["total"] - scores["y_total"];
+    
+           // x_w = (x_w1+x_w2)/2;
+           // y_w = (y_w1+y_w2)/2;
+    
+            x_w = x_w2/x_w1;
+            y_w = y_w2/y_w1;
+    
+            let determine_axis = x_w-y_w;
+    
+            if(determine_axis > 0) {
+                if(scores["x_total"] !== 0){
+                    x1_w1 = steps_counter["x_steps"] - steps_counter["x1"];
+                    x2_w1 = steps_counter["x_steps"] - steps_counter["x1"];
+                    x1_w2 = scores["x_total"] - scores["x1"];
+                    x2_w2 = scores["x_total"] - scores["x2"];
+    
+                    //x1_w = (x1_w1+x1_w2)/2;
+                    //x2_w = (x2_w1+x2_w2)/2;
+    
+                    x1_w = x1_w2/x1_w1;
+                    x2_w = x2_w2/x1_w1;
+    
+                    let determine_x = x1_w-x2_w;
+    
+                    if(determine_x > 0) {
+                        return "x1"
+                    }else if(determine_x < 0){
+                        return "x2";
+                    }else {
+                        let i = Math.floor(random(0,2)+1);
+    
+                        switch(i) {
+                            case 1:
+                                return "x1";
+                                break;
+                            case 2:
+                                return "x2";
+                                break;
+                        }
+                    }
+                }else {
+                    let i = Math.floor(random(0,2)+1);
+    
+                    switch(i) {
+                        case 1:
+                            return "x1";
+                            break;
+                        case 2:
+                            return "x2";
+                            break;
+                    }
+                }
+            }else if(determine_axis < 0) {
+                if(scores["y_total"] !== 0) {
+                    y1_w1 = steps_counter["y_steps"] - steps_counter["y1"];
+                    y2_w1 = steps_counter["y_steps"] - steps_counter["y1"];
+                    y1_w2 = scores["y_total"] - scores["y1"];
+                    y2_w2 = scores["y_total"] - scores["y2"];
+    
+                   // y1_w = (y1_w1+y1_w2)/2;
+                   // y2_w = (y2_w1+y2_w2)/2;
+    
+                    y1_w = y1_w2/y1_w1;
+                    y2_w = y2_w2/y1_w1;
+    
+                    let determine_y = y1_w-y2_w;
+    
+                    if(determine_y > 0) {
+                        return "y1"
+                    }else if (determine_y < 0){
+                        return "y2";
+                    }else {
+                        let i = Math.floor(random(0,2)+1);
+    
+                        switch(i) {
+                            case 1:
+                                return "y1";
+                                break;
+                            case 2:
+                                return "y2";
+                                break;
+                        }
+                    }
+                }else {
+                    let i = Math.floor(random(0,2)+1);
+    
+                    switch(i) {
+                        case 1:
+                            return "y1";
+                            break;
+                        case 2:
+                            return "y2";
+                            break;
+                    }
+                }
+            }else {
+                let i = Math.floor(random(0,4)+1);
+    
+                switch(i) {
+                    case 1:
+                        return "y1";
+                        break;
+                    case 2:
+                        return "x1";
+                        break;
+                    case 3:
+                        return "y2";
+                        break;
+                    case 4:
+                        return "x2";
+                        break;
+                }
+            }
+        }else {
+            let i = Math.floor(random(0,4)+1);
+    
+            switch(i) {
+                case 1:
+                    return "y1";
+                    break;
+                case 2:
+                    return "x1";
+                    break;
+                case 3:
+                    return "y2";
+                    break;
+                case 4:
+                    return "x2";
+                    break;
+            }
+        }
+    }else if(determine_mode === 5) {
+        if(scores["total"] !== 0){ 
+            x_w1 = steps_counter["total"] - steps_counter["x_steps"];
+            y_w1 = steps_counter["total"] - steps_counter["y_steps"];
+            x_w2 = scores["total"] - scores["x_total"];
+            y_w2 = scores["total"] - scores["y_total"];
+    
+           // x_w = (x_w1+x_w2)/2;
+           // y_w = (y_w1+y_w2)/2;
+    
+            x_w = x_w1/x_w2;
+            y_w = y_w1/y_w2;
+    
+            let determine_axis = x_w-y_w;
+    
+            if(determine_axis > 0) {
+                if(scores["x_total"] !== 0){
+                    x1_w1 = steps_counter["x_steps"] - steps_counter["x1"];
+                    x2_w1 = steps_counter["x_steps"] - steps_counter["x1"];
+                    x1_w2 = scores["x_total"] - scores["x1"];
+                    x2_w2 = scores["x_total"] - scores["x2"];
+    
+                    //x1_w = (x1_w1+x1_w2)/2;
+                    //x2_w = (x2_w1+x2_w2)/2;
+    
+                    x1_w = x1_w1/x1_w2;
+                    x2_w = x2_w1/x1_w2;
+    
+                    let determine_x = x1_w-x2_w;
+    
+                    if(determine_x > 0) {
+                        return "x1"
+                    }else if(determine_x < 0){
+                        return "x2";
+                    }else {
+                        let i = Math.floor(random(0,2)+1);
+    
+                        switch(i) {
+                            case 1:
+                                return "x1";
+                                break;
+                            case 2:
+                                return "x2";
+                                break;
+                        }
+                    }
+                }else {
+                    let i = Math.floor(random(0,2)+1);
+    
+                    switch(i) {
+                        case 1:
+                            return "x1";
+                            break;
+                        case 2:
+                            return "x2";
+                            break;
+                    }
+                }
+            }else if(determine_axis < 0) {
+                if(scores["y_total"] !== 0) {
+                    y1_w1 = steps_counter["y_steps"] - steps_counter["y1"];
+                    y2_w1 = steps_counter["y_steps"] - steps_counter["y1"];
+                    y1_w2 = scores["y_total"] - scores["y1"];
+                    y2_w2 = scores["y_total"] - scores["y2"];
+    
+                   // y1_w = (y1_w1+y1_w2)/2;
+                   // y2_w = (y2_w1+y2_w2)/2;
+    
+                    y1_w = y1_w1/y1_w2;
+                    y2_w = y2_w1/y1_w2;
     
                     let determine_y = y1_w-y2_w;
     
