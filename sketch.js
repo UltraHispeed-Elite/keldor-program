@@ -170,8 +170,8 @@ function findDirection() {
        // x_w = (x_w1+x_w2)/2;
        // y_w = (y_w1+y_w2)/2;
 
-        x_w = x_w2/x_w1;
-        y_w = y_w2/y_w1;
+        x_w = x_w1/x_w2;
+        y_w = y_w1/y_w2;
 
         let determine_axis = x_w-y_w;
 
@@ -185,8 +185,8 @@ function findDirection() {
                 //x1_w = (x1_w1+x1_w2)/2;
                 //x2_w = (x2_w1+x2_w2)/2;
 
-                x1_w = x1_w2/x1_w1;
-                x2_w = x2_w2/x1_w1;
+                x1_w = x1_w1/x1_w2;
+                x2_w = x2_w1/x1_w2;
 
                 let determine_x = x1_w-x2_w;
 
@@ -228,8 +228,8 @@ function findDirection() {
                // y1_w = (y1_w1+y1_w2)/2;
                // y2_w = (y2_w1+y2_w2)/2;
 
-                y1_w = y1_w2/y1_w1;
-                y2_w = y2_w2/y1_w1;
+                y1_w = y1_w1/y1_w2;
+                y2_w = y2_w1/y1_w2;
 
                 let determine_y = y1_w-y2_w;
 
