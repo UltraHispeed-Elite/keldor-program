@@ -151,7 +151,7 @@ function findDirection() {
         let determine_axis = x_w-y_w;
 
         if(determine_axis > 0) {
-            if(scores["x_total" !== 0]){
+            if(scores["x_total"] !== 0){
                 x1_w = scores["x_total"] - scores["x1"];
                 x2_w = scores["x_total"] - scores["x2"];
 
