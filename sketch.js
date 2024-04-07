@@ -10,6 +10,8 @@ var jerry_path_map;
 
 var score_counter;
 
+var iteration;
+
 var scores = {
     "y1": 0,
     "x1": 0,
@@ -19,6 +21,16 @@ var scores = {
     "y_total": 0,
     "total": 0
 };
+
+var steps_counter = {
+    "y1": 0,
+    "x1": 0,
+    "y2": 0,
+    "x2": 0,
+    "x_steps": 0,
+    "y_steps": 0,
+    "total": 0
+}
 
 function setup() {
     let screen = createCanvas(400,400);
@@ -103,6 +115,11 @@ function keldorMove(direction){
         keldor.vel.x = 0;
         keldor.vel.y = 0;
     };
+
+    steps_counter[direction]++;
+    steps_counter["x_steps"] = steps_counter["x1"]+steps_counter["x2"];
+    steps_counter["y_steps"] = steps_counter["y1"]+steps_counter["y2"];
+    steps_counter["total"] = steps_counter["x_steps"]+steps_counter["y_steps"];
 }
 
 function mapJerry() {
@@ -112,7 +129,7 @@ function mapJerry() {
     //console.log(jerry_map[Math.floor(keldor.y)][Math.floor(keldor.x)]);
     if(score_counter === true) {
         jerry_score_map[parseInt(Math.floor(keldor.y))][parseInt(Math.floor(keldor.x))]++;
-        console.log(jerry_score_map[parseInt(Math.floor(keldor.y))][parseInt(Math.floor(keldor.x))])
+        //console.log(jerry_score_map[parseInt(Math.floor(keldor.y))][parseInt(Math.floor(keldor.x))])
     }
     new jerry.Sprite(keldor.x, keldor.y);
 }
@@ -145,15 +162,15 @@ function keldorScore() {
 function findDirection() {
     let x_w, y_w, x1_w, x2_w, y1_w, y2_w;
     if(scores["total"] !== 0){ 
-        x_w = scores["total"] - scores["x_total"];
-        y_w = scores["total"] - scores["y_total"];
+        x_w = steps_counter["total"] - steps_counter["x_steps"];
+        y_w = steps_counter["total"] - steps_counter["y_steps"];
 
         let determine_axis = x_w-y_w;
 
         if(determine_axis > 0) {
-            if(scores["x_total" !== 0]){
-                x1_w = scores["x_total"] - scores["x1"];
-                x2_w = scores["x_total"] - scores["x2"];
+            if(steps_counter["x_steps"] !== 0){
+                x1_w = steps_counter["x_steps"] - steps_counter["x1"];
+                x2_w = steps_counter["x_steps"] - steps_counter["x2"];
 
                 let determine_x = x1_w-x2_w;
 
@@ -186,9 +203,9 @@ function findDirection() {
                 }
             }
         }else if(determine_axis < 0) {
-            if(scores["y_total"] !== 0) {
-                y1_w = scores["y_total"] - scores["y1"];
-                y2_w = scores["y_total"] - scores["y2"];
+            if(steps_counter["y_steps"] !== 0) {
+                y1_w = steps_counter["y_steps"] - steps_counter["y1"];
+                y2_w = steps_counter["y_steps"] - steps_counter["y2"];
 
                 let determine_y = y1_w-y2_w;
 
